@@ -65,7 +65,7 @@ Apache-2.0. Individuals and companies may use, modify, and distribute it, provid
 
 ## Status
 
-`0.1.0`: product definition, minimal skill skeleton, and cross-platform automated validation. Real model behavior tests, sample projects, and a one-click installer are not included yet.
+`0.1.1`: bilingual documentation, minimal skill skeleton, and cross-platform automated validation. Real model behavior tests, sample projects, and a one-click installer are not included yet.
 
 ---
 
@@ -138,4 +138,4 @@ Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许�
 
 ## 当前状态
 
-`0.1.0`：产品定义、最小技能骨架和跨平台自动校验。还没有接入真实行为测试、示例项目和一键安装包。
+`0.1.1`：双语 README、最小技能骨架和跨平台自动校验。还没有接入真实行为测试、示例项目和一键安装包。
