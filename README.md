@@ -1,4 +1,77 @@
+# Project Health Lite
+
+[English](#project-health-lite) | [中文](#项目体检轻量版)
+
+A lightweight, read-only project checkup skill for people who are not full-time developers or security specialists. It gives a plain-language answer to three questions:
+
+- Is this project ready to ship?
+- What should I check before handing it over?
+- Can I trust what an AI agent just changed?
+
+The skill supports pre-launch, handover, and agent-change acceptance modes. Findings are grouped into **blocks launch**, **fix before delivery**, and **can wait**.
+
+This is an independent lite edition, not a replacement for the professional [`project-health`](https://github.com/Fallen-leaves089/project-health). The lite edition focuses on first-pass checks and accessibility; the professional edition covers deeper audits, enterprise rule packs, and support.
+
+## Install
+
+Copy the whole `project-health-lite/` directory into your host's skills directory:
+
+| Host | Common location |
+|---|---|
+| Codex | `~/.codex/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| Other Agent Skills hosts | Follow the host documentation |
+
+`SKILL.md` must be at the root of the installed skill folder. No account, network access, or configuration is required.
+
+## Usage
+
+In a project directory, ask:
+
+```text
+Is this project ready to ship?
+```
+
+You can also ask:
+
+```text
+Check this before handover.
+An AI agent just changed this; help me verify it.
+```
+
+The first pass is read-only. The agent must ask for explicit approval before running tests, builds, installs, or other commands that may write files.
+
+## Output
+
+Reports use three plain-language categories:
+
+- Blocks launch
+- Fix before delivery
+- Can wait
+
+Every finding includes a file location, the reason it matters, and the next step. Every report ends with the parts that were not checked. See [references/report-format.md](references/report-format.md) for the full format.
+
+## Safety boundaries
+
+- Read-only by default
+- No automatic edits, deletions, deployments, releases, or migrations
+- Never displays secrets, tokens, cookies, private keys, or production credentials
+- Does not read `.ssh`, browser profiles, or password managers
+- Never turns "not found" into "absolutely safe"
+
+## License
+
+Apache-2.0. Individuals and companies may use, modify, and distribute it, provided the license and NOTICE are retained.
+
+## Status
+
+`0.1.0`: product definition, minimal skill skeleton, and cross-platform automated validation. Real model behavior tests, sample projects, and a one-click installer are not included yet.
+
+---
+
 # 项目体检·轻量版
+
+[English](#project-health-lite) | 中文
 
 给普通人的低门槛项目体检。它用一份说人话的报告回答：
 
