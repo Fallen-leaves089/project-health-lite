@@ -22,7 +22,7 @@ Copy the whole `project-health-lite/` directory into your host's skills director
 | Claude Code | `~/.claude/skills/` |
 | Other Agent Skills hosts | Follow the host documentation |
 
-`SKILL.md` must be at the root of the installed skill folder. No account, network access, or configuration is required.
+`SKILL.md` must be at the root of the installed skill folder. The folder also contains `AGENTS.md` and `PITFALLS.md`; keep them so the agent can apply standing rules and accumulate lessons. No account, network access, or configuration is required.
 
 ## Usage
 
@@ -61,13 +61,17 @@ Every finding includes a file location, the reason it matters, and the next step
 - Does not read `.ssh`, browser profiles, or password managers
 - Never turns "not found" into "absolutely safe"
 
+## Getting better with use
+
+The skill folder includes `AGENTS.md` and `PITFALLS.md`. The agent reads the pitfalls log before each task and records new pitfalls in it. It searches for an existing entry first; a duplicate pitfall updates that entry instead of creating a synonym. Checks of other projects remain read-only: write the entry back to the skill folder, or ask before writing to the target project.
+
 ## License
 
 Apache-2.0. Individuals and companies may use, modify, and distribute it, provided the license and NOTICE are retained.
 
 ## Status
 
-`0.1.2`: clearer scope selection, consent boundaries for reports and runnable checks, and evidence confidence labels. Real model behavior tests, sample projects, and a one-click installer are not included yet.
+`0.1.3`: persistent agent rules and a deduplicated pitfalls log, so the skill improves with use. Real model behavior tests, sample projects, and a one-click installer are not included yet.
 
 ---
 
@@ -93,7 +97,7 @@ Apache-2.0. Individuals and companies may use, modify, and distribute it, provid
 | Claude Code | `~/.claude/skills/` |
 | 其他 Agent Skills 宿主 | 以宿主文档为准 |
 
-安装后目录根部必须有 `SKILL.md`。不需要账号，不需要联网，不需要配置。
+安装后目录根部必须有 `SKILL.md`。目录里的 `AGENTS.md` 和 `PITFALLS.md` 也要一起保留，Agent 才能应用常驻规则并积累避坑经验。不需要账号，不需要联网，不需要配置。
 
 ## 第一次使用
 
@@ -132,6 +136,10 @@ Agent 验收默认先看本次改动；上线和交接默认看整个项目。�
 - 不读取 `.ssh`、浏览器配置和密码管理器
 - 不把“没发现”写成“绝对安全”
 
+## 越用越强
+
+技能目录里有 `AGENTS.md` 和 `PITFALLS.md`。每次任务先读避坑记录；遇到新的坑就写入，先查重，重复的坑只补充原条目。检查别人的项目时保持只读，避坑记录写回技能目录，或先取得同意再写目标项目。
+
 ## 产品定义
 
 目标用户、三种模式、非目标和验收标准见 [docs/PRODUCT.md](docs/PRODUCT.md)。
@@ -142,4 +150,4 @@ Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许�
 
 ## 当前状态
 
-`0.1.2`：更清楚的检查范围、报告与可执行检查的同意边界，以及证据置信度。还没有接入真实行为测试、示例项目和一键安装包。
+`0.1.3`：新增常驻规则和去重的避坑记录，让技能在重复使用中积累经验。还没有接入真实行为测试、示例项目和一键安装包。

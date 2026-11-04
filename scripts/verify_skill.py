@@ -10,6 +10,8 @@ from pathlib import Path
 
 REQUIRED_FILES = (
     "SKILL.md",
+    "AGENTS.md",
+    "PITFALLS.md",
     "README.md",
     "LICENSE",
     "NOTICE",
@@ -148,6 +150,8 @@ def check_tree(root: Path) -> list[str]:
 def write_fixture(root: Path) -> None:
     files = {
         "SKILL.md": "---\nname: project-health-lite\ndescription: test description long enough for validation\n---\n\n# Test\n",
+        "AGENTS.md": "# Test\n",
+        "PITFALLS.md": "# Test\n",
         "README.md": "# Test\n",
         "LICENSE": "Apache License\nVersion 2.0\n",
         "NOTICE": "Test\n",
@@ -210,6 +214,13 @@ def self_test() -> int:
         write_lf(root / "README.md", "[broken](missing.md)\n")
         if not check_tree(root):
             print("self-test failed: broken link was accepted")
+            return 1
+
+        write_fixture(root)
+        (root / "PITFALLS.md").unlink()
+        missing = check_tree(root)
+        if not any("missing required file: PITFALLS.md" in error for error in missing):
+            print("self-test failed: missing PITFALLS.md was accepted")
             return 1
     print("verify_skill self-test: ok")
     return 0
