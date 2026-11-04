@@ -41,6 +41,8 @@ An AI agent just changed this; help me verify it.
 
 The first pass is read-only. The agent must ask for explicit approval before running tests, builds, installs, or other commands that may write files.
 
+It also confirms the scope: an agent-change acceptance starts with the current diff, while launch and handover checks default to the whole project. A project without Git can still be checked from a read-only snapshot, but the report must say that change history is unavailable.
+
 ## Output
 
 Reports use three plain-language categories:
@@ -49,7 +51,7 @@ Reports use three plain-language categories:
 - Fix before delivery
 - Can wait
 
-Every finding includes a file location, the reason it matters, and the next step. Every report ends with the parts that were not checked. See [references/report-format.md](references/report-format.md) for the full format.
+Every finding includes a file location, the reason it matters, and the next step. Evidence is marked as **verified**, **inferred**, or **not checked** so conclusions do not sound more certain than they are. Every report ends with the parts that were not checked. See [references/report-format.md](references/report-format.md) for the full format.
 
 ## Safety boundaries
 
@@ -65,7 +67,7 @@ Apache-2.0. Individuals and companies may use, modify, and distribute it, provid
 
 ## Status
 
-`0.1.1`: bilingual documentation, minimal skill skeleton, and cross-platform automated validation. Real model behavior tests, sample projects, and a one-click installer are not included yet.
+`0.1.2`: clearer scope selection, consent boundaries for reports and runnable checks, and evidence confidence labels. Real model behavior tests, sample projects, and a one-click installer are not included yet.
 
 ---
 
@@ -110,6 +112,8 @@ Agent 刚改完，帮我验收
 
 第一次只做只读检查；需要运行测试、构建或安装依赖时，Agent 会先请求同意。
 
+Agent 验收默认先看本次改动；上线和交接默认看整个项目。没有 Git 的项目仍可做只读快照检查，但报告会说明看不到变更历史。
+
 ## 输出
 
 报告分三档，不使用 P0/P1 作为主分类：
@@ -118,7 +122,7 @@ Agent 刚改完，帮我验收
 - 最好先修
 - 可以以后再说
 
-每条都带文件位置、原因和下一步。报告最后会写明没检查到的部分。完整格式见 [references/report-format.md](references/report-format.md)。
+每条都带文件位置、原因和下一步。证据会标成 **已验证**、**推断** 或 **未检查**，避免把不确定写成确定。报告最后会写明没检查到的部分。完整格式见 [references/report-format.md](references/report-format.md)。
 
 ## 安全边界
 
@@ -138,4 +142,4 @@ Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许�
 
 ## 当前状态
 
-`0.1.1`：双语 README、最小技能骨架和跨平台自动校验。还没有接入真实行为测试、示例项目和一键安装包。
+`0.1.2`：更清楚的检查范围、报告与可执行检查的同意边界，以及证据置信度。还没有接入真实行为测试、示例项目和一键安装包。
