@@ -8,6 +8,8 @@ A lightweight, read-only project checkup skill for people who are not full-time 
 - What should I check before handing it over?
 - Can I trust what an AI agent just changed?
 
+**Who it's for**: no coding, Git, CI, or security background is required. If you can use an agent, you can ask in plain language.
+
 The skill supports pre-launch, handover, and agent-change acceptance modes. Findings are grouped into **blocks launch**, **fix before delivery**, and **can wait**.
 
 This is an independent lite edition, not a replacement for the professional [`project-health`](https://github.com/Fallen-leaves089/project-health). The lite edition focuses on first-pass checks and accessibility; the professional edition covers deeper audits, enterprise rule packs, and support.
@@ -84,6 +86,8 @@ Apache-2.0. Individuals and companies may use, modify, and distribute it, provid
 - 这个项目现在能不能上线？
 - 交接前最该看什么？
 - Agent 改完代码，能不能信？
+
+**适合谁**：不需要懂代码、Git、CI 或安全术语；只要能使用 Agent，就可以用日常语言发起检查。
 
 这是独立的轻量版，不是专业版 [`project-health`](https://github.com/Fallen-leaves089/project-health) 的替代品。轻量版负责第一次体检和普及，专业版负责深度检查、企业规则包和审计服务。
 
