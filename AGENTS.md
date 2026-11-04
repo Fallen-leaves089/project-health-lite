@@ -10,6 +10,13 @@
 4. 写报告前先说明保存位置；运行测试、构建、安装依赖、启动服务或联网前，先说明影响并取得同意。
 5. 修改任务先说明改什么、为什么改、影响范围和验证方式；未确认前不动手。
 
+## 与专业版的分工
+
+- 本技能是普通用户、第一次体检和快速说人话的默认入口。
+- 用户明确要求深度审计、P0-P3、证据链、真实构建/迁移/容器回归或交付验收时，说明这会超出轻量范围；如果已安装 `project-health`，建议升级并征得同意。
+- 没有专业版可用时，先做安全的第一轮只读检查，列出需要专业版复核的部分，不要伪装成完整审计。
+- 两版同时可用时，不并行跑两套完整检查。
+
 ## 普通人与证据
 
 - 默认用日常语言；第一次出现 Git、CI、迁移等术语时解释。
@@ -34,6 +41,7 @@
 ## English summary
 
 - Read `PITFALLS.md` at task start.
+- This is the default entry for everyday users and first-pass checks. Escalate explicit deep-audit requests to `project-health` when available.
 - Review is read-only; do not edit source, configuration, dependencies, or Git history.
 - Explain report paths; obtain consent before tests, builds, installs, services, or network access.
 - Record every pitfall, except duplicates; update the existing entry instead.

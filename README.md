@@ -14,6 +14,8 @@ The skill supports pre-launch, handover, and agent-change acceptance modes. Find
 
 This is an independent lite edition, not a replacement for the professional [`project-health`](https://github.com/Fallen-leaves089/project-health). The lite edition focuses on first-pass checks and accessibility; the professional edition covers deeper audits, enterprise rule packs, and support.
 
+**Which edition**: use this lite edition as the default for everyday users and first-pass checks. Escalate to `project-health` for deep audits, P0-P3 findings, evidence chains, real regression, or delivery acceptance.
+
 ## Install
 
 Copy the whole `project-health-lite/` directory into your host's skills directory:
@@ -73,7 +75,7 @@ Apache-2.0. Individuals and companies may use, modify, and distribute it, provid
 
 ## Status
 
-`0.1.3`: persistent agent rules and a deduplicated pitfalls log, so the skill improves with use. Real model behavior tests, sample projects, and a one-click installer are not included yet.
+`0.1.4`: routing with the professional edition and a "three actions first" report header. Real model behavior tests, sample projects, and a one-click installer are not included yet.
 
 ---
 
@@ -90,6 +92,8 @@ Apache-2.0. Individuals and companies may use, modify, and distribute it, provid
 **适合谁**：不需要懂代码、Git、CI 或安全术语；只要能使用 Agent，就可以用日常语言发起检查。
 
 这是独立的轻量版，不是专业版 [`project-health`](https://github.com/Fallen-leaves089/project-health) 的替代品。轻量版负责第一次体检和普及，专业版负责深度检查、企业规则包和审计服务。
+
+**怎么选**：普通用户和第一次体检默认用本技能；需要深度审计、P0-P3、证据链、真实构建/迁移/容器回归或交付验收时，升级专业版。
 
 ## 安装
 
@@ -154,4 +158,4 @@ Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许�
 
 ## 当前状态
 
-`0.1.3`：新增常驻规则和去重的避坑记录，让技能在重复使用中积累经验。还没有接入真实行为测试、示例项目和一键安装包。
+`0.1.4`：新增与专业版的路由规则，以及“先做这三件事”的报告开头。还没有接入真实行为测试、示例项目和一键安装包。
