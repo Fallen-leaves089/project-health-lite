@@ -41,8 +41,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Run validator self-test
-        run: python scripts/verify_skill.py --self-test
+        run: python -B scripts/verify_skill.py --self-test
       - name: Validate skill package
-        run: python scripts/verify_skill.py
+        run: python -B scripts/verify_skill.py
+      - name: Run contract tests
+        run: python -B -m unittest discover -s tests -p "test_*.py"
       - name: Compile Python scripts
-        run: python -m compileall -q scripts
+        run: python -m compileall -q scripts tests

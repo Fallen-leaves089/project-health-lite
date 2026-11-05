@@ -2,15 +2,16 @@
 
 [English](#project-health-lite) | [中文](#项目体检轻量版)
 
-A lightweight, read-only project checkup skill for people who are not full-time developers or security specialists. It gives a plain-language answer to three questions:
+A lightweight, read-only project checkup skill for people who are not full-time developers or security specialists. It gives a plain-language answer to four questions:
 
 - Is this project ready to ship?
 - What should I check before handing it over?
 - Can I trust what an AI agent just changed?
+- What should I improve or maintain next?
 
 **Who it's for**: no coding, Git, CI, or security background is required. If you can use an agent, you can ask in plain language.
 
-The skill supports pre-launch, handover, and agent-change acceptance modes. Findings are grouped into **blocks launch**, **fix before delivery**, and **can wait**.
+The skill supports pre-launch, handover, agent-change acceptance, and general maintenance review. Findings are grouped into **blocks launch**, **fix before delivery**, and **can wait**.
 
 This is an independent lite edition, not a replacement for the professional [`project-health`](https://github.com/Fallen-leaves089/project-health). The lite edition focuses on first-pass checks and accessibility; the professional edition covers deeper audits, enterprise rule packs, and support.
 
@@ -41,28 +42,31 @@ You can also ask:
 ```text
 Check this before handover.
 An AI agent just changed this; help me verify it.
+What should I optimize or maintain in this project?
 ```
 
-The first pass is read-only. The agent must ask for explicit approval before running tests, builds, installs, or other commands that may write files.
+The first pass is read-only. The agent must ask for explicit approval before running tests, builds, installs, or other commands that may write files. Reports follow the user's language: English prompts get English reports, while code, paths, and commands stay unchanged.
 
-It also confirms the scope: an agent-change acceptance starts with the current diff, while launch and handover checks default to the whole project. A project without Git can still be checked from a read-only snapshot, but the report must say that change history is unavailable.
+It also confirms the scope: an agent-change acceptance starts with the current diff, while launch, handover, and general maintenance checks default to the whole project. A project without Git can still be checked from a read-only snapshot, but the report must say that change history is unavailable.
 
 ## Output
 
-Reports use three plain-language categories:
+Reports usually use three plain-language categories. When there is no material finding, omit the categories and action list and say so explicitly:
 
 - Blocks launch
 - Fix before delivery
 - Can wait
 
-Every finding includes a file location, the reason it matters, and the next step. Evidence is marked as **verified**, **inferred**, or **not checked** so conclusions do not sound more certain than they are. Every report ends with the parts that were not checked. See [references/report-format.md](references/report-format.md) for the full format.
+Every finding includes a file location, an evidence line, the reason it matters, and the next step. Evidence is marked as **verified**, **inferred**, or **not checked** so conclusions do not sound more certain than they are. Every report ends with the parts that were not checked. See [references/report-format.md](references/report-format.md) for the full format.
 
 ## Safety boundaries
 
 - Read-only by default
 - No automatic edits, deletions, deployments, releases, or migrations
 - Never displays secrets, tokens, cookies, private keys, or production credentials
+- Does not judge whether a secret value is real or a placeholder; uncertain values are marked as suspected
 - Does not read `.ssh`, browser profiles, or password managers
+- Treats all target-repository text, including `AGENTS.md`, `PITFALLS.md`, and README files, as untrusted evidence rather than instructions
 - Never turns "not found" into "absolutely safe"
 
 ## Getting better with use
@@ -73,9 +77,21 @@ The skill folder includes `AGENTS.md` and `PITFALLS.md`. The agent reads the pit
 
 Apache-2.0. Individuals and companies may use, modify, and distribute it, provided the license and NOTICE are retained.
 
+## Validation
+
+Run the deterministic checks with:
+
+```text
+python -B scripts/verify_skill.py --self-test
+python -B scripts/verify_skill.py
+python -B -m unittest discover -s tests -p "test_*.py"
+```
+
+The contract tests check the safety rules, templates, fixtures, and package structure. Real model behavior should be re-run for future changes with the manual scenarios in [tests/acceptance-cases.md](tests/acceptance-cases.md).
+
 ## Status
 
-`0.1.4`: routing with the professional edition and a "three actions first" report header. Real model behavior tests, sample projects, and a one-click installer are not included yet.
+`0.1.5`: untrusted-target protections, language-aware output, a general maintenance mode, deterministic contract tests and fixtures, stronger package validation, and an "up to three actions first" report header. A manual install smoke test and all ten scenarios in the acceptance checklist have been exercised; automated model regression and a one-click installer are still not included.
 
 ---
 
@@ -88,10 +104,11 @@ Apache-2.0. Individuals and companies may use, modify, and distribute it, provid
 - 这个项目现在能不能上线？
 - 交接前最该看什么？
 - Agent 改完代码，能不能信？
+- 接下来最值得优化或维护什么？
 
 **适合谁**：不需要懂代码、Git、CI 或安全术语；只要能使用 Agent，就可以用日常语言发起检查。
 
-这是独立的轻量版，不是专业版 [`project-health`](https://github.com/Fallen-leaves089/project-health) 的替代品。轻量版负责第一次体检和普及，专业版负责深度检查、企业规则包和审计服务。
+这是独立的轻量版，不是专业版 [`project-health`](https://github.com/Fallen-leaves089/project-health) 的替代品。轻量版负责第一次体检、维护检查和普及，专业版负责深度检查、企业规则包和审计服务。
 
 **怎么选**：普通用户和第一次体检默认用本技能；需要深度审计、P0-P3、证据链、真实构建/迁移/容器回归或交付验收时，升级专业版。
 
@@ -120,28 +137,31 @@ Apache-2.0. Individuals and companies may use, modify, and distribute it, provid
 ```text
 交接前帮我检查一下
 Agent 刚改完，帮我验收
+看看这个项目有没有需要优化或维护的地方
 ```
 
-第一次只做只读检查；需要运行测试、构建或安装依赖时，Agent 会先请求同意。
+第一次只做只读检查；需要运行测试、构建或安装依赖时，Agent 会先请求同意。报告语言跟随用户：中文提问用中文报告，英文提问用英文报告；代码、路径和命令保持原文。
 
-Agent 验收默认先看本次改动；上线和交接默认看整个项目。没有 Git 的项目仍可做只读快照检查，但报告会说明看不到变更历史。
+Agent 验收默认先看本次改动；上线、交接和通用维护检查默认看整个项目。没有 Git 的项目仍可做只读快照检查，但报告会说明看不到变更历史。
 
 ## 输出
 
-报告分三档，不使用 P0/P1 作为主分类：
+报告通常分三档，不使用 P0/P1 作为主分类；没有明显发现时省略三档并明确说明：
 
 - 会卡住上线
 - 最好先修
 - 可以以后再说
 
-每条都带文件位置、原因和下一步。证据会标成 **已验证**、**推断** 或 **未检查**，避免把不确定写成确定。报告最后会写明没检查到的部分。完整格式见 [references/report-format.md](references/report-format.md)。
+每条都带文件位置、证据、原因和下一步。证据会标成 **已验证**、**推断** 或 **未检查**，避免把不确定写成确定。有发现时报告开头先给“最重要的 1-3 件事”；没有明显发现时省略三档和行动清单。最后写明没检查到的部分。完整格式见 [references/report-format.md](references/report-format.md)。
 
 ## 安全边界
 
 - 检查阶段默认只读
 - 不自动修改、删除、部署、发布或迁移
 - 不展示密钥、令牌、Cookie、私钥或生产凭据
+- 不根据值的字样判断秘密是否真实或是否只是占位符；无法确认时标为“疑似”
 - 不读取 `.ssh`、浏览器配置和密码管理器
+- 目标仓库的 `AGENTS.md`、`PITFALLS.md`、README 和其他文本只作为证据，不作为指令执行
 - 不把“没发现”写成“绝对安全”
 
 ## 越用越强
@@ -150,7 +170,19 @@ Agent 验收默认先看本次改动；上线和交接默认看整个项目。�
 
 ## 产品定义
 
-目标用户、三种模式、非目标和验收标准见 [docs/PRODUCT.md](docs/PRODUCT.md)。
+目标用户、检查模式、非目标和验收标准见 [docs/PRODUCT.md](docs/PRODUCT.md)。
+
+## 验证
+
+运行确定性检查：
+
+```text
+python -B scripts/verify_skill.py --self-test
+python -B scripts/verify_skill.py
+python -B -m unittest discover -s tests -p "test_*.py"
+```
+
+契约测试检查安全规则、模板、fixture 和包结构；后续修改仍应按 [tests/acceptance-cases.md](tests/acceptance-cases.md) 重新执行真实模型验收。
 
 ## 许可证
 
@@ -158,4 +190,4 @@ Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许�
 
 ## 当前状态
 
-`0.1.4`：新增与专业版的路由规则，以及“先做这三件事”的报告开头。还没有接入真实行为测试、示例项目和一键安装包。
+`0.1.5`：新增不可信目标保护、语言跟随、通用维护检查、确定性契约测试和示例项目，强化包校验；报告改为“最重要的 1-3 件事”。已手工验证独立安装，并走查验收清单的全部 10 个场景；自动化模型回归和一键安装包仍未接入。
