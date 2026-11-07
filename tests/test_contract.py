@@ -100,6 +100,23 @@ class SkillContractTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
 
+    def test_release_download_path_is_documented(self) -> None:
+        readme = read("README.md")
+        self.assertIn("releases/latest", readme)
+        self.assertIn("Assets", readme)
+        self.assertIn(".sha256", readme)
+        self.assertIn("Get-FileHash", readme)
+        self.assertIn("Expand-Archive", readme)
+        self.assertIn("Copy-Item", readme)
+
+    def test_ci_uses_current_actions(self) -> None:
+        workflow = read(".github/workflows/validate.yml")
+        self.assertIn("actions/checkout@v7", workflow)
+        self.assertIn("actions/setup-python@v7", workflow)
+        self.assertIn("ubuntu-24.04", workflow)
+        self.assertNotIn("actions/checkout@v4", workflow)
+        self.assertNotIn("actions/setup-python@v5", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()
