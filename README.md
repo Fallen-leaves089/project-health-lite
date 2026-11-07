@@ -19,7 +19,25 @@ This is an independent lite edition, not a replacement for the professional [`pr
 
 ## Install
 
-Copy the whole `project-health-lite/` directory into your host's skills directory:
+**Recommended: download the zip from the [latest GitHub Release Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest).** Set `$version` below to the release shown there (currently `0.1.6`), verify the adjacent `.sha256` file, and extract the archive:
+
+```powershell
+$version = '0.1.6'
+$zip = ".\project-health-lite-v$version.zip"
+$expected = ((Get-Content -LiteralPath ($zip + '.sha256') -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
+$actual = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($actual -ne $expected) { throw 'SHA256 mismatch' }
+Expand-Archive -LiteralPath $zip -DestinationPath . -Force
+```
+
+Copy the extracted `project-health-lite/` directory into your host's skills directory. Codex example:
+
+```powershell
+Copy-Item -LiteralPath .\project-health-lite -Destination "$HOME\.codex\skills\" -Recurse -Force
+Test-Path -LiteralPath "$HOME\.codex\skills\project-health-lite\SKILL.md"
+```
+
+For Claude Code, use `$HOME\.claude\skills\` as the destination. You can also copy the whole `project-health-lite/` directory from a repository checkout.
 
 | Host | Common location |
 |---|---|
@@ -27,7 +45,7 @@ Copy the whole `project-health-lite/` directory into your host's skills director
 | Claude Code | `~/.claude/skills/` |
 | Other Agent Skills hosts | Follow the host documentation |
 
-`SKILL.md` must be at the root of the installed skill folder. The folder also contains `AGENTS.md` and `PITFALLS.md`; keep them so the agent can apply standing rules and accumulate lessons. No account, network access, or configuration is required.
+`SKILL.md` must be at the root of the installed skill folder. The folder also contains `AGENTS.md` and `PITFALLS.md`; keep them so the agent can apply standing rules and accumulate lessons. After installation, no account, network access, or configuration is required.
 
 ## Usage
 
@@ -91,7 +109,7 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 
 ## Status
 
-`0.1.5`: untrusted-target protections, language-aware output, a general maintenance mode, deterministic contract tests and fixtures, stronger package validation, and an "up to three actions first" report header. A manual install smoke test and all ten scenarios in the acceptance checklist have been exercised; automated model regression and a one-click installer are still not included.
+`0.1.6`: add a download-and-verify path through GitHub Releases Assets, update CI to the current GitHub Actions runtimes, and keep the untrusted-target, language-aware, maintenance-check, contract-test, and package-validation behavior from `0.1.5`. Automated model regression is still not included.
 
 ---
 
@@ -114,7 +132,25 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 
 ## 安装
 
-把整个 `project-health-lite/` 目录复制到宿主的 skills 目录：
+**推荐从 [最新 Releases Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) 下载。** 把下面 `$version` 改成页面显示的版本（当前为 `0.1.6`），下载 zip 和旁边的 `.sha256` 文件，核对哈希后解压：
+
+```powershell
+$version = '0.1.6'
+$zip = ".\project-health-lite-v$version.zip"
+$expected = ((Get-Content -LiteralPath ($zip + '.sha256') -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
+$actual = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($actual -ne $expected) { throw 'SHA256 mismatch' }
+Expand-Archive -LiteralPath $zip -DestinationPath . -Force
+```
+
+把解压出的 `project-health-lite/` 目录复制到宿主的 skills 目录。Codex 示例：
+
+```powershell
+Copy-Item -LiteralPath .\project-health-lite -Destination "$HOME\.codex\skills\" -Recurse -Force
+Test-Path -LiteralPath "$HOME\.codex\skills\project-health-lite\SKILL.md"
+```
+
+Claude Code 把目标目录换成 `$HOME\.claude\skills\`。也可以从仓库检出中直接复制整个 `project-health-lite/` 目录。常见宿主目录如下：
 
 | 宿主 | 常见目录 |
 |---|---|
@@ -122,7 +158,7 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 | Claude Code | `~/.claude/skills/` |
 | 其他 Agent Skills 宿主 | 以宿主文档为准 |
 
-安装后目录根部必须有 `SKILL.md`。目录里的 `AGENTS.md` 和 `PITFALLS.md` 也要一起保留，Agent 才能应用常驻规则并积累避坑经验。不需要账号，不需要联网，不需要配置。
+安装后目录根部必须有 `SKILL.md`。目录里的 `AGENTS.md` 和 `PITFALLS.md` 也要一起保留，Agent 才能应用常驻规则并积累避坑经验。安装完成后运行时不需要账号、不需要联网、不需要配置。
 
 ## 第一次使用
 
@@ -190,4 +226,4 @@ Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许�
 
 ## 当前状态
 
-`0.1.5`：新增不可信目标保护、语言跟随、通用维护检查、确定性契约测试和示例项目，强化包校验；报告改为“最重要的 1-3 件事”。已手工验证独立安装，并走查验收清单的全部 10 个场景；自动化模型回归和一键安装包仍未接入。
+`0.1.6`：补上 GitHub Releases Assets 下载、SHA256 核对和安装路径，CI 更新到当前 GitHub Actions 运行时；继续保留 `0.1.5` 的不可信目标保护、语言跟随、通用维护检查、契约测试和包校验。自动化模型回归仍未接入。

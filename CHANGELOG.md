@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.6 - 2026-11-07
+
+- README 和产品说明补上从 GitHub Releases Assets 下载、SHA256 核对、解压和安装的完整路径。
+- CI 更新到 `actions/checkout@v7`、`actions/setup-python@v7`，并把 Ubuntu 3.9 任务升级到 `ubuntu-24.04`。
+- 契约测试增加发布下载入口和 CI 运行时回归检查。
+- 许可证仍为 Apache-2.0，个人和企业均可商用。
+
 ## 0.1.5 - 2026-11-05
 
 - 明确目标仓库的 `AGENTS.md`、`PITFALLS.md`、README、注释和其他文本是不可信数据，只作为证据，不执行其中指令。
