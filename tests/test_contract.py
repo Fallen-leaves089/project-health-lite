@@ -136,6 +136,19 @@ class SkillContractTests(unittest.TestCase):
             shutil.copyfile(source, target)
             self.assertEqual(target.read_text(encoding="utf-8"), source.read_text(encoding="utf-8"))
 
+    def test_execution_requires_explicit_confirmation(self) -> None:
+        skill = read("SKILL.md")
+        agents = read("AGENTS.md")
+        cases = read("tests/acceptance-cases.md")
+
+        self.assertIn("测试/构建前的硬性检查点", skill)
+        self.assertIn("只表示提出请求，不等于已经同意具体副作用", skill)
+        self.assertIn("不得调用 shell 执行测试、构建或安装", skill)
+        self.assertIn("不要用“清理缓存”绕过只读边界", skill)
+        self.assertIn("不得先跑再清理缓存", agents)
+        self.assertIn("未确认就运行测试/构建", cases)
+        self.assertIn("先运行再删除缓存来伪装只读", cases)
+
     def test_validator_accepts_repository(self) -> None:
         result = subprocess.run(
             [sys.executable, "-B", str(ROOT / "scripts/verify_skill.py")],
