@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0 - 2026-11-08
+
+- 新增 Windows PowerShell 与 macOS/Linux 的下载、校验、安装和升级命令；升级时保留 `PITFALLS.local.md`。
+- 把避坑记忆拆成只读基线 `PITFALLS.md` 和用户本地覆盖层 `PITFALLS.local.md`；支持技能目录、`PROJECT_HEALTH_LITE_HOME`、用户主目录和宿主记忆工具的回退。
+- 新增 `PITFALLS.local.example.md`，并将 `PITFALLS.local.md` 加入 `.gitignore`。
+- 校验器跳过本地记忆文件，新增对应契约测试；发布时统一升级版本号。
+- 新增“只读技能目录”和“升级保留本地记忆”两个行为验收场景；自动化模型回归仍未接入。
+
 ## 0.1.6 - 2026-11-07
 
 - README 和产品说明补上从 GitHub Releases Assets 下载、SHA256 核对、解压和安装的完整路径。

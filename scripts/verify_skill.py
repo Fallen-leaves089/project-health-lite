@@ -17,6 +17,7 @@ REQUIRED_FILES = (
     "SKILL.md",
     "AGENTS.md",
     "PITFALLS.md",
+    "PITFALLS.local.example.md",
     "README.md",
     "LICENSE",
     "NOTICE",
@@ -43,6 +44,7 @@ SKIP_DIRS = {
     "dist",
     "node_modules",
 }
+SKIP_FILES = {"PITFALLS.local.md"}
 FORBIDDEN_PATTERNS = (
     re.compile(r"(?i)(?<![\w])[A-Z]:[\\/]"),
     re.compile(r"(?<![\w.])/(?:home|Users)/[A-Za-z0-9._-]+"),
@@ -196,6 +198,8 @@ def iter_text_files(root: Path) -> Iterator[Path]:
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = sorted(name for name in dirnames if name not in SKIP_DIRS)
         for name in sorted(filenames):
+            if name in SKIP_FILES:
+                continue
             path = Path(dirpath) / name
             if path.suffix.lower() in TEXT_SUFFIXES or name in SPECIAL_TEXT_FILES:
                 yield path
@@ -262,6 +266,7 @@ def write_fixture(root: Path) -> None:
         ".github/workflows/validate.yml": "name: test\n",
         "AGENTS.md": "# Test\n",
         "PITFALLS.md": "# Test\n",
+        "PITFALLS.local.example.md": "# Test\n",
         "README.md": "# Test\n\n`1.2.3`: test\n",
         "LICENSE": "Apache License\nVersion 2.0\n",
         "NOTICE": "Test\n",
@@ -296,6 +301,12 @@ def self_test() -> int:
         write_fixture(root)
         if check_tree(root):
             print("self-test failed: valid fixture was rejected")
+            return 1
+
+        write_fixture(root)
+        write_lf(root / "PITFALLS.local.md", f"{SENSITIVE_WINDOWS_PATH}\n")
+        if check_tree(root):
+            print("self-test failed: local memory file was scanned")
             return 1
 
         skill = root / "SKILL.md"
@@ -426,6 +437,13 @@ def self_test() -> int:
         missing = check_tree(root)
         if not any("missing required file: PITFALLS.md" in error for error in missing):
             print("self-test failed: missing PITFALLS.md was accepted")
+            return 1
+
+        write_fixture(root)
+        (root / "PITFALLS.local.example.md").unlink()
+        missing = check_tree(root)
+        if not any("missing required file: PITFALLS.local.example.md" in error for error in missing):
+            print("self-test failed: missing PITFALLS.local.example.md was accepted")
             return 1
     print("verify_skill self-test: ok")
     return 0

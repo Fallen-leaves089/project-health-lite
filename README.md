@@ -19,10 +19,12 @@ This is an independent lite edition, not a replacement for the professional [`pr
 
 ## Install
 
-**Recommended: download the zip from the [latest GitHub Release Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest).** Set `$version` below to the release shown there (currently `0.1.6`), verify the adjacent `.sha256` file, and extract the archive:
+**Recommended: download the zip from the [latest GitHub Release Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest).** Set `$version` below to the release shown there (currently `0.2.0`), verify the adjacent `.sha256` file, and extract the archive:
+
+Windows PowerShell:
 
 ```powershell
-$version = '0.1.6'
+$version = '0.2.0'
 $zip = ".\project-health-lite-v$version.zip"
 $expected = ((Get-Content -LiteralPath ($zip + '.sha256') -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
 $actual = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -30,14 +32,51 @@ if ($actual -ne $expected) { throw 'SHA256 mismatch' }
 Expand-Archive -LiteralPath $zip -DestinationPath . -Force
 ```
 
-Copy the extracted `project-health-lite/` directory into your host's skills directory. Codex example:
+macOS / Linux:
 
-```powershell
-Copy-Item -LiteralPath .\project-health-lite -Destination "$HOME\.codex\skills\" -Recurse -Force
-Test-Path -LiteralPath "$HOME\.codex\skills\project-health-lite\SKILL.md"
+```bash
+version='0.2.0'
+zip="project-health-lite-v${version}.zip"
+expected=$(cut -d' ' -f1 "${zip}.sha256")
+if command -v sha256sum >/dev/null 2>&1; then
+  actual=$(sha256sum "${zip}" | awk '{print $1}')
+else
+  actual=$(shasum -a 256 "${zip}" | awk '{print $1}')
+fi
+[ "$actual" = "$expected" ] || { echo 'SHA256 mismatch' >&2; exit 1; }
+unzip -o "${zip}"
 ```
 
-For Claude Code, use `$HOME\.claude\skills\` as the destination. You can also copy the whole `project-health-lite/` directory from a repository checkout.
+Extract in a clean directory outside the skills directory; the commands below only copy the extracted folder. They install or upgrade in place and preserve `PITFALLS.local.md`.
+
+Windows PowerShell:
+
+```powershell
+$destination = "$HOME\.codex\skills"
+New-Item -ItemType Directory -Force -Path $destination | Out-Null
+$localMemory = Join-Path $destination 'project-health-lite\PITFALLS.local.md'
+$backup = "$localMemory.bak"
+if (Test-Path -LiteralPath $localMemory) { Copy-Item -LiteralPath $localMemory -Destination $backup -Force }
+Copy-Item -LiteralPath .\project-health-lite -Destination $destination -Recurse -Force
+if (Test-Path -LiteralPath $backup) { Move-Item -LiteralPath $backup -Destination $localMemory -Force }
+Test-Path -LiteralPath (Join-Path $destination 'project-health-lite\SKILL.md')
+```
+
+macOS / Linux:
+
+```bash
+destination="$HOME/.codex/skills"
+mkdir -p "$destination"
+memory="$destination/project-health-lite/PITFALLS.local.md"
+backup="$(mktemp)"
+if [ -f "$memory" ]; then cp "$memory" "$backup"; else rm -f "$backup"; fi
+cp -R project-health-lite "$destination/"
+if [ -s "$backup" ]; then cp "$backup" "$memory"; fi
+rm -f "$backup"
+test -f "$destination/project-health-lite/SKILL.md"
+```
+
+For Claude Code, replace `~/.codex/skills/` with `~/.claude/skills/` (Windows: `$HOME\.claude\skills\`). You can also copy the whole `project-health-lite/` directory from a repository checkout.
 
 | Host | Common location |
 |---|---|
@@ -45,7 +84,18 @@ For Claude Code, use `$HOME\.claude\skills\` as the destination. You can also co
 | Claude Code | `~/.claude/skills/` |
 | Other Agent Skills hosts | Follow the host documentation |
 
-`SKILL.md` must be at the root of the installed skill folder. The folder also contains `AGENTS.md` and `PITFALLS.md`; keep them so the agent can apply standing rules and accumulate lessons. After installation, no account, network access, or configuration is required.
+`SKILL.md` must be at the root of the installed skill folder. The folder also contains `AGENTS.md`, `PITFALLS.md`, and `PITFALLS.local.example.md`; keep them. `PITFALLS.local.md` is created by the agent on first use. After installation, no account, network access, or configuration is required.
+
+## Memory and upgrades
+
+`PITFALLS.md` is a read-only baseline shipped with the skill. The agent writes new lessons to `PITFALLS.local.md`, which is gitignored and preserved by the install/upgrade commands above. It chooses the first writable location:
+
+1. `$PROJECT_HEALTH_LITE_HOME/PITFALLS.local.md` when the variable is set;
+2. `PITFALLS.local.md` in the skill directory;
+3. `~/.project-health-lite/PITFALLS.local.md`;
+4. the host's persistent memory feature.
+
+If none is writable, the check still runs and the report says the lesson was not persisted. Never write target-repository content into memory.
 
 ## Usage
 
@@ -89,7 +139,7 @@ Every finding includes a file location, an evidence line, the reason it matters,
 
 ## Getting better with use
 
-The skill folder includes `AGENTS.md` and `PITFALLS.md`. The agent reads the pitfalls log before each task and records new pitfalls in it. It searches for an existing entry first; a duplicate pitfall updates that entry instead of creating a synonym. Checks of other projects remain read-only: write the entry back to the skill folder, or ask before writing to the target project.
+The skill folder includes a read-only `PITFALLS.md` baseline and a user-local `PITFALLS.local.md` overlay. The agent reads both before each task and writes only to the local overlay. It searches for an existing entry first; a duplicate pitfall updates that entry instead of creating a synonym. If the install directory is read-only, it uses `PROJECT_HEALTH_LITE_HOME` or `~/.project-health-lite/`; if neither is writable, it reports that the lesson was not persisted. Checks of other projects remain read-only.
 
 ## License
 
@@ -109,7 +159,7 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 
 ## Status
 
-`0.1.6`: add a download-and-verify path through GitHub Releases Assets, update CI to the current GitHub Actions runtimes, and keep the untrusted-target, language-aware, maintenance-check, contract-test, and package-validation behavior from `0.1.5`. Automated model regression is still not included.
+`0.2.0`: add Windows PowerShell and macOS/Linux install and upgrade guidance, preserve `PITFALLS.local.md` across upgrades, and split the shipped baseline from a portable local memory overlay. This release keeps the untrusted-target, language-aware, maintenance-check, contract-test, and package-validation behavior from `0.1.6`. Automated model regression is still not included.
 
 ---
 
@@ -132,10 +182,12 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 
 ## 安装
 
-**推荐从 [最新 Releases Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) 下载。** 把下面 `$version` 改成页面显示的版本（当前为 `0.1.6`），下载 zip 和旁边的 `.sha256` 文件，核对哈希后解压：
+**推荐从 [最新 Releases Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) 下载。** 把下面 `$version` 改成页面显示的版本（当前为 `0.2.0`），下载 zip 和旁边的 `.sha256` 文件，核对哈希后解压：
+
+Windows PowerShell：
 
 ```powershell
-$version = '0.1.6'
+$version = '0.2.0'
 $zip = ".\project-health-lite-v$version.zip"
 $expected = ((Get-Content -LiteralPath ($zip + '.sha256') -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
 $actual = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -143,14 +195,51 @@ if ($actual -ne $expected) { throw 'SHA256 mismatch' }
 Expand-Archive -LiteralPath $zip -DestinationPath . -Force
 ```
 
-把解压出的 `project-health-lite/` 目录复制到宿主的 skills 目录。Codex 示例：
+macOS / Linux：
 
-```powershell
-Copy-Item -LiteralPath .\project-health-lite -Destination "$HOME\.codex\skills\" -Recurse -Force
-Test-Path -LiteralPath "$HOME\.codex\skills\project-health-lite\SKILL.md"
+```bash
+version='0.2.0'
+zip="project-health-lite-v${version}.zip"
+expected=$(cut -d' ' -f1 "${zip}.sha256")
+if command -v sha256sum >/dev/null 2>&1; then
+  actual=$(sha256sum "${zip}" | awk '{print $1}')
+else
+  actual=$(shasum -a 256 "${zip}" | awk '{print $1}')
+fi
+[ "$actual" = "$expected" ] || { echo 'SHA256 mismatch' >&2; exit 1; }
+unzip -o "${zip}"
 ```
 
-Claude Code 把目标目录换成 `$HOME\.claude\skills\`。也可以从仓库检出中直接复制整个 `project-health-lite/` 目录。常见宿主目录如下：
+请在一个干净的、skills 目录之外的目录解压；下面的命令只复制解压出的目录，并在安装或升级时保留 `PITFALLS.local.md`。
+
+Windows PowerShell：
+
+```powershell
+$destination = "$HOME\.codex\skills"
+New-Item -ItemType Directory -Force -Path $destination | Out-Null
+$localMemory = Join-Path $destination 'project-health-lite\PITFALLS.local.md'
+$backup = "$localMemory.bak"
+if (Test-Path -LiteralPath $localMemory) { Copy-Item -LiteralPath $localMemory -Destination $backup -Force }
+Copy-Item -LiteralPath .\project-health-lite -Destination $destination -Recurse -Force
+if (Test-Path -LiteralPath $backup) { Move-Item -LiteralPath $backup -Destination $localMemory -Force }
+Test-Path -LiteralPath (Join-Path $destination 'project-health-lite\SKILL.md')
+```
+
+macOS / Linux：
+
+```bash
+destination="$HOME/.codex/skills"
+mkdir -p "$destination"
+memory="$destination/project-health-lite/PITFALLS.local.md"
+backup="$(mktemp)"
+if [ -f "$memory" ]; then cp "$memory" "$backup"; else rm -f "$backup"; fi
+cp -R project-health-lite "$destination/"
+if [ -s "$backup" ]; then cp "$backup" "$memory"; fi
+rm -f "$backup"
+test -f "$destination/project-health-lite/SKILL.md"
+```
+
+Claude Code 把目标目录换成 `~/.claude/skills/`（Windows 为 `$HOME\.claude\skills\`）。也可以从仓库检出中直接复制整个 `project-health-lite/` 目录。常见宿主目录如下：
 
 | 宿主 | 常见目录 |
 |---|---|
@@ -158,7 +247,18 @@ Claude Code 把目标目录换成 `$HOME\.claude\skills\`。也可以从仓库�
 | Claude Code | `~/.claude/skills/` |
 | 其他 Agent Skills 宿主 | 以宿主文档为准 |
 
-安装后目录根部必须有 `SKILL.md`。目录里的 `AGENTS.md` 和 `PITFALLS.md` 也要一起保留，Agent 才能应用常驻规则并积累避坑经验。安装完成后运行时不需要账号、不需要联网、不需要配置。
+安装后目录根部必须有 `SKILL.md`。目录里的 `AGENTS.md`、`PITFALLS.md` 和 `PITFALLS.local.example.md` 也要一起保留；`PITFALLS.local.md` 由 Agent 在首次使用时创建。安装完成后运行时不需要账号、不需要联网、不需要配置。
+
+## 记忆与升级
+
+`PITFALLS.md` 是随技能发布的只读基线。Agent 把新教训写入 `PITFALLS.local.md`；该文件已被 Git 忽略，并会被上面的安装/升级命令保留。记忆位置按以下顺序选择：
+
+1. 已设置 `PROJECT_HEALTH_LITE_HOME` 时，使用它指向目录下的 `PITFALLS.local.md`；
+2. 技能目录下的 `PITFALLS.local.md`；
+3. `~/.project-health-lite/PITFALLS.local.md`；
+4. 宿主提供的持久记忆功能。
+
+如果都不可写，检查仍会执行，报告会说明“本轮教训未持久化”。不要把目标仓库内容写入记忆。
 
 ## 第一次使用
 
@@ -202,7 +302,7 @@ Agent 验收默认先看本次改动；上线、交接和通用维护检查默�
 
 ## 越用越强
 
-技能目录里有 `AGENTS.md` 和 `PITFALLS.md`。每次任务先读避坑记录；遇到新的坑就写入，先查重，重复的坑只补充原条目。检查别人的项目时保持只读，避坑记录写回技能目录，或先取得同意再写目标项目。
+技能目录里有只读基线 `PITFALLS.md` 和用户本地覆盖层 `PITFALLS.local.md`。每次任务先读两份记录；遇到新的坑只写入本地覆盖层，先查重，重复的坑只补充原条目。如果技能目录不可写，就按顺序尝试 `PROJECT_HEALTH_LITE_HOME`、`~/.project-health-lite/` 或宿主记忆功能；都不可写时在报告中说明“本轮教训未持久化”。检查别人的项目时保持只读，不把目标内容写入记忆。
 
 ## 产品定义
 
@@ -226,4 +326,4 @@ Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许�
 
 ## 当前状态
 
-`0.1.6`：补上 GitHub Releases Assets 下载、SHA256 核对和安装路径，CI 更新到当前 GitHub Actions 运行时；继续保留 `0.1.5` 的不可信目标保护、语言跟随、通用维护检查、契约测试和包校验。自动化模型回归仍未接入。
+`0.2.0`：补充 Windows PowerShell 与 macOS/Linux 的安装和升级说明，升级时保留 `PITFALLS.local.md`；把随包基线和用户本地记忆拆开，支持多位置回退。继续保留 `0.1.6` 的不可信目标保护、语言跟随、通用维护检查、契约测试和包校验。自动化模型回归仍未接入。

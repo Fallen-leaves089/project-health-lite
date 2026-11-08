@@ -48,8 +48,54 @@ class SkillContractTests(unittest.TestCase):
 
     def test_acceptance_cases_cover_security_and_language(self) -> None:
         cases = read("tests/acceptance-cases.md")
-        for phrase in ("恶意 AGENTS.md", "英文提问", "没有明显问题", "危险请求"):
+        for phrase in (
+            "恶意 AGENTS.md",
+            "英文提问",
+            "没有明显问题",
+            "危险请求",
+            "只读技能目录",
+            "升级保留本地记忆",
+        ):
             self.assertIn(phrase, cases)
+
+    def test_portable_memory_contract_is_documented(self) -> None:
+        skill = read("SKILL.md")
+        agents = read("AGENTS.md")
+        readme = read("README.md")
+        example = read("PITFALLS.local.example.md")
+
+        for content in (skill, agents, readme):
+            self.assertIn("PITFALLS.local.md", content)
+            self.assertIn("PROJECT_HEALTH_LITE_HOME", content)
+
+        self.assertIn("只读基线", skill)
+        self.assertIn("~/.project-health-lite/PITFALLS.local.md", readme)
+        gitignore = read(".gitignore")
+        self.assertIn("PITFALLS.local.md", gitignore)
+        self.assertIn("PITFALLS.local.md.bak", gitignore)
+        self.assertIn("不会被技能升级覆盖", example)
+
+        baseline = read("PITFALLS.md")
+        self.assertIn("用户本地覆盖层", baseline)
+        self.assertIn("不写目标项目", baseline)
+        self.assertNotIn("避坑条目写回本技能目录", baseline)
+
+        cases = read("tests/acceptance-cases.md")
+        self.assertNotIn("写进本技能的 `PITFALLS.md`", cases)
+
+    def test_cross_platform_install_is_documented(self) -> None:
+        readme = read("README.md")
+        for phrase in (
+            "Windows PowerShell",
+            "macOS / Linux",
+            "sha256sum",
+            "shasum -a 256",
+            "unzip -o",
+            "cp -R project-health-lite",
+            "~/.claude/skills/",
+            "PITFALLS.local.md",
+        ):
+            self.assertIn(phrase, readme)
 
     def test_report_template_has_evidence_for_each_category(self) -> None:
         template = read("references/report-format.md")
