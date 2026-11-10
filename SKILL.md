@@ -3,7 +3,7 @@ name: project-health-lite
 description: 普通用户和第一次体检的默认低门槛项目体检；当用户问“这个项目能不能上线”“交接前要检查什么”“Agent 改完代码是否可靠”“有没有需要优化或维护的地方”时使用，也适用于 project readiness, handover check, AI agent change review, and maintenance review 等英文请求。只做默认只读的第一次检查；需要 P0-P3、证据链、真实回归或交付验收时交给 project-health。
 license: Apache-2.0
 metadata:
-  version: 0.2.0
+  version: 0.2.1
 ---
 
 # 项目体检·轻量版
