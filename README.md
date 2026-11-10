@@ -19,12 +19,12 @@ This is an independent lite edition, not a replacement for the professional [`pr
 
 ## Install
 
-**Recommended: download the zip from the [latest GitHub Release Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest).** Set `$version` below to the release shown there (currently `0.2.0`), verify the adjacent `.sha256` file, and extract the archive:
+**Recommended: download the zip from the [latest GitHub Release Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest).** Set `$version` below to the release shown there (currently `0.2.1`), verify the adjacent `.sha256` file, and extract the archive:
 
 Windows PowerShell:
 
 ```powershell
-$version = '0.2.0'
+$version = '0.2.1'
 $zip = ".\project-health-lite-v$version.zip"
 $expected = ((Get-Content -LiteralPath ($zip + '.sha256') -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
 $actual = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -35,7 +35,7 @@ Expand-Archive -LiteralPath $zip -DestinationPath . -Force
 macOS / Linux:
 
 ```bash
-version='0.2.0'
+version='0.2.1'
 zip="project-health-lite-v${version}.zip"
 expected=$(cut -d' ' -f1 "${zip}.sha256")
 if command -v sha256sum >/dev/null 2>&1; then
@@ -159,7 +159,7 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 
 ## Status
 
-`0.2.0`: add Windows PowerShell and macOS/Linux install and upgrade guidance, preserve `PITFALLS.local.md` across upgrades, and split the shipped baseline from a portable local memory overlay. This release keeps the untrusted-target, language-aware, maintenance-check, contract-test, and package-validation behavior from `0.1.6`. Automated model regression is still not included.
+`0.2.1`: republish the package so the release assets include the explicit-consent preflight rule added in `aa1cd88`; the earlier `v0.2.0` assets predated that change. This release keeps the untrusted-target, language-aware, maintenance-check, contract-test, and package-validation behavior from `0.2.0`. Automated model regression is still not included.
 
 ---
 
@@ -182,12 +182,12 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 
 ## 安装
 
-**推荐从 [最新 Releases Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) 下载。** 把下面 `$version` 改成页面显示的版本（当前为 `0.2.0`），下载 zip 和旁边的 `.sha256` 文件，核对哈希后解压：
+**推荐从 [最新 Releases Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) 下载。** 把下面 `$version` 改成页面显示的版本（当前为 `0.2.1`），下载 zip 和旁边的 `.sha256` 文件，核对哈希后解压：
 
 Windows PowerShell：
 
 ```powershell
-$version = '0.2.0'
+$version = '0.2.1'
 $zip = ".\project-health-lite-v$version.zip"
 $expected = ((Get-Content -LiteralPath ($zip + '.sha256') -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
 $actual = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -198,7 +198,7 @@ Expand-Archive -LiteralPath $zip -DestinationPath . -Force
 macOS / Linux：
 
 ```bash
-version='0.2.0'
+version='0.2.1'
 zip="project-health-lite-v${version}.zip"
 expected=$(cut -d' ' -f1 "${zip}.sha256")
 if command -v sha256sum >/dev/null 2>&1; then
@@ -326,4 +326,4 @@ Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许�
 
 ## 当前状态
 
-`0.2.0`：补充 Windows PowerShell 与 macOS/Linux 的安装和升级说明，升级时保留 `PITFALLS.local.md`；把随包基线和用户本地记忆拆开，支持多位置回退。继续保留 `0.1.6` 的不可信目标保护、语言跟随、通用维护检查、契约测试和包校验。自动化模型回归仍未接入。
+`0.2.1`：重新发布，使发布资产正式包含 `aa1cd88` 中加入的“测试/构建前必须明确同意”规则；此前的 `v0.2.0` 资产早于该改动。继续保留 `0.2.0` 的不可信目标保护、语言跟随、通用维护检查、契约测试和包校验。自动化模型回归仍未接入。
