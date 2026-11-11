@@ -19,12 +19,12 @@ This is an independent lite edition, not a replacement for the professional [`pr
 
 ## Install
 
-**Recommended: download the zip from the [latest GitHub Release Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest).** Set `$version` below to the release shown there (currently `0.2.1`), verify the adjacent `.sha256` file, and extract the archive:
+**Recommended: download the zip from the [latest GitHub Release Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest).** Set `$version` below to the release shown there (currently `0.3.0`), verify the adjacent `.sha256` file, and extract the archive:
 
 Windows PowerShell:
 
 ```powershell
-$version = '0.2.1'
+$version = '0.3.0'
 $zip = ".\project-health-lite-v$version.zip"
 $expected = ((Get-Content -LiteralPath ($zip + '.sha256') -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
 $actual = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -35,7 +35,7 @@ Expand-Archive -LiteralPath $zip -DestinationPath . -Force
 macOS / Linux:
 
 ```bash
-version='0.2.1'
+version='0.3.0'
 zip="project-health-lite-v${version}.zip"
 expected=$(cut -d' ' -f1 "${zip}.sha256")
 if command -v sha256sum >/dev/null 2>&1; then
@@ -141,6 +141,8 @@ Every finding includes a file location, an evidence line, the reason it matters,
 
 The skill folder includes a read-only `PITFALLS.md` baseline and a user-local `PITFALLS.local.md` overlay. The agent reads both before each task and writes only to the local overlay. It searches for an existing entry first; a duplicate pitfall updates that entry instead of creating a synonym. If the install directory is read-only, it uses `PROJECT_HEALTH_LITE_HOME` or `~/.project-health-lite/`; if neither is writable, it reports that the lesson was not persisted. Checks of other projects remain read-only.
 
+The shipped baseline now includes 44 common-user pitfalls, a "check these 12 first" list, red flags that should stop a review, and plain-language questions users can ask an agent. These are prompts for confirmation, not findings about the target project.
+
 ## License
 
 Apache-2.0. Individuals and companies may use, modify, and distribute it, provided the license and NOTICE are retained.
@@ -159,7 +161,7 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 
 ## Status
 
-`0.2.1`: republish the package so the release assets include the explicit-consent preflight rule added in `aa1cd88`; the earlier `v0.2.0` assets predated that change. This release keeps the untrusted-target, language-aware, maintenance-check, contract-test, and package-validation behavior from `0.2.0`. Automated model regression is still not included.
+`0.3.0`: add 44 common-user pitfalls and a "check these 12 first" quick list, covering wrong project directories, treating a review as a repair request, secret exposure, missing runtimes, databases, backups, domains/HTTPS, firewalls, permissions, rollback, handover, and AI-change acceptance. Keep the read-only baseline, untrusted-target protection, language-aware reports, contract tests, and package validation. Automated model regression is still not included.
 
 ---
 
@@ -182,12 +184,12 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 
 ## 安装
 
-**推荐从 [最新 Releases Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) 下载。** 把下面 `$version` 改成页面显示的版本（当前为 `0.2.1`），下载 zip 和旁边的 `.sha256` 文件，核对哈希后解压：
+**推荐从 [最新 Releases Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) 下载。** 把下面 `$version` 改成页面显示的版本（当前为 `0.3.0`），下载 zip 和旁边的 `.sha256` 文件，核对哈希后解压：
 
 Windows PowerShell：
 
 ```powershell
-$version = '0.2.1'
+$version = '0.3.0'
 $zip = ".\project-health-lite-v$version.zip"
 $expected = ((Get-Content -LiteralPath ($zip + '.sha256') -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
 $actual = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -198,7 +200,7 @@ Expand-Archive -LiteralPath $zip -DestinationPath . -Force
 macOS / Linux：
 
 ```bash
-version='0.2.1'
+version='0.3.0'
 zip="project-health-lite-v${version}.zip"
 expected=$(cut -d' ' -f1 "${zip}.sha256")
 if command -v sha256sum >/dev/null 2>&1; then
@@ -304,6 +306,8 @@ Agent 验收默认先看本次改动；上线、交接和通用维护检查默�
 
 技能目录里有只读基线 `PITFALLS.md` 和用户本地覆盖层 `PITFALLS.local.md`。每次任务先读两份记录；遇到新的坑只写入本地覆盖层，先查重，重复的坑只补充原条目。如果技能目录不可写，就按顺序尝试 `PROJECT_HEALTH_LITE_HOME`、`~/.project-health-lite/` 或宿主记忆功能；都不可写时在报告中说明“本轮教训未持久化”。检查别人的项目时保持只读，不把目标内容写入记忆。
 
+随包基线现在包含 44 条普通人高频坑、“如果只看 12 条”速查、遇到就该停下的危险信号，以及普通人可以直接照着问 Agent 的句子。这些是确认清单，不是对目标项目的既成结论。
+
 ## 产品定义
 
 目标用户、检查模式、非目标和验收标准见 [docs/PRODUCT.md](docs/PRODUCT.md)。
@@ -326,4 +330,4 @@ Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许�
 
 ## 当前状态
 
-`0.2.1`：重新发布，使发布资产正式包含 `aa1cd88` 中加入的“测试/构建前必须明确同意”规则；此前的 `v0.2.0` 资产早于该改动。继续保留 `0.2.0` 的不可信目标保护、语言跟随、通用维护检查、契约测试和包校验。自动化模型回归仍未接入。
+`0.3.0`：新增 44 条普通人高频坑和“如果只看 12 条”速查，覆盖找错目录、把检查当修复、密钥外泄、环境缺失、数据库、备份、域名/HTTPS、防火墙、权限、回滚、交接和 AI 改动验收。继续保留只读基线、不可信目标保护、语言跟随、契约测试和包校验；自动化模型回归仍未接入。
