@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import shutil
 import subprocess
 import sys
@@ -148,6 +149,30 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("不得先跑再清理缓存", agents)
         self.assertIn("未确认就运行测试/构建", cases)
         self.assertIn("先运行再删除缓存来伪装只读", cases)
+
+    def test_common_user_pitfalls_are_documented_and_referenced(self) -> None:
+        baseline = read("PITFALLS.md")
+        for phrase in (
+            "如果只看 12 条",
+            "普通人高频坑",
+            "给错目录",
+            "只看 AI 说“已完成”",
+            "本机能跑就以为能上线",
+            "没备份就迁移",
+            "防火墙或云安全组没放行",
+            "遇到这些信号先停下",
+            "普通人可以这样问",
+        ):
+            self.assertIn(phrase, baseline)
+
+        ids = set(re.findall(r"\| (U-\d{2}) \|", baseline))
+        self.assertEqual(44, len(ids), msg=f"expected 44 common-user pitfalls, found {len(ids)}")
+
+        skill = read("SKILL.md")
+        self.assertIn("普通人高频坑", skill)
+        self.assertIn("需要你确认", skill)
+        self.assertIn("域名/HTTPS", skill)
+        self.assertIn("防火墙/安全组", skill)
 
     def test_validator_accepts_repository(self) -> None:
         result = subprocess.run(
