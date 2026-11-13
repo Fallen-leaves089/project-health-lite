@@ -150,7 +150,7 @@ The shipped baseline now includes 44 common-user pitfalls, a "check these 12 fir
 
 ## Citation
 
-If this project helps your work, cite it using [`CITATION.cff`](CITATION.cff). Author ORCID: [`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831). The repository's **Cite this repository** menu can generate APA and BibTeX.
+Author: [`fallen-leaves`](https://github.com/Fallen-leaves089); ORCID: [`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831). If this project helps your work, cite it using [`CITATION.cff`](CITATION.cff). The repository's **Cite this repository** menu can generate APA and BibTeX.
 
 ## License
 
@@ -335,7 +335,7 @@ python -B -m unittest discover -s tests -p "test_*.py"
 
 ## 引用
 
-如果这个项目对你的工作有帮助，请按 [`CITATION.cff`](CITATION.cff) 引用。作者 ORCID：[`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831)。GitHub 仓库页的 **Cite this repository** 可直接生成 APA 和 BibTeX。
+作者：[`fallen-leaves`](https://github.com/Fallen-leaves089)；ORCID：[`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831)。如果这个项目对你的工作有帮助，请按 [`CITATION.cff`](CITATION.cff) 引用。GitHub 仓库页的 **Cite this repository** 可直接生成 APA 和 BibTeX。
 
 ## 许可证
 
