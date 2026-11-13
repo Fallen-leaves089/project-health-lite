@@ -2,6 +2,11 @@
 
 [English](#project-health-lite) | [中文](#项目体检轻量版)
 
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0005--8897--4831-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0005-8897-4831)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/Fallen-leaves089/project-health-lite?label=release)](https://github.com/Fallen-leaves089/project-health-lite/releases/latest)
+[![Validate](https://img.shields.io/github/actions/workflow/status/Fallen-leaves089/project-health-lite/validate.yml?branch=main&label=validate&logo=github)](https://github.com/Fallen-leaves089/project-health-lite/actions/workflows/validate.yml)
+
 A lightweight, read-only project checkup skill for people who are not full-time developers or security specialists. It gives a plain-language answer to four questions:
 
 - Is this project ready to ship?
@@ -142,6 +147,10 @@ Every finding includes a file location, an evidence line, the reason it matters,
 The skill folder includes a read-only `PITFALLS.md` baseline and a user-local `PITFALLS.local.md` overlay. The agent reads both before each task and writes only to the local overlay. It searches for an existing entry first; a duplicate pitfall updates that entry instead of creating a synonym. If the install directory is read-only, it uses `PROJECT_HEALTH_LITE_HOME` or `~/.project-health-lite/`; if neither is writable, it reports that the lesson was not persisted. Checks of other projects remain read-only.
 
 The shipped baseline now includes 44 common-user pitfalls, a "check these 12 first" list, red flags that should stop a review, and plain-language questions users can ask an agent. These are prompts for confirmation, not findings about the target project.
+
+## Citation
+
+If this project helps your work, cite it using [`CITATION.cff`](CITATION.cff). Author ORCID: [`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831). The repository's **Cite this repository** menu can generate APA and BibTeX.
 
 ## License
 
@@ -323,6 +332,10 @@ python -B -m unittest discover -s tests -p "test_*.py"
 ```
 
 契约测试检查安全规则、模板、fixture 和包结构；后续修改仍应按 [tests/acceptance-cases.md](tests/acceptance-cases.md) 重新执行真实模型验收。
+
+## 引用
+
+如果这个项目对你的工作有帮助，请按 [`CITATION.cff`](CITATION.cff) 引用。作者 ORCID：[`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831)。GitHub 仓库页的 **Cite this repository** 可直接生成 APA 和 BibTeX。
 
 ## 许可证
 
