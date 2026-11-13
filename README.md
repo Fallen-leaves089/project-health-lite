@@ -2,10 +2,13 @@
 
 [English](#project-health-lite) | [中文](#项目体检轻量版)
 
+[![Author](https://img.shields.io/badge/author-fallen--leaves-181717?logo=github&logoColor=white)](https://github.com/Fallen-leaves089)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0005--8897--4831-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0005-8897-4831)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/Fallen-leaves089/project-health-lite?label=release)](https://github.com/Fallen-leaves089/project-health-lite/releases/latest)
 [![Validate](https://img.shields.io/github/actions/workflow/status/Fallen-leaves089/project-health-lite/validate.yml?branch=main&label=validate&logo=github)](https://github.com/Fallen-leaves089/project-health-lite/actions/workflows/validate.yml)
+
+Repository links: [Source](https://github.com/Fallen-leaves089/project-health-lite) · [Releases](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) · [Changelog](CHANGELOG.md) · [Issues](https://github.com/Fallen-leaves089/project-health-lite/issues) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
 A lightweight, read-only project checkup skill for people who are not full-time developers or security specialists. It gives a plain-language answer to four questions:
 
@@ -150,7 +153,7 @@ The shipped baseline now includes 44 common-user pitfalls, a "check these 12 fir
 
 ## Citation
 
-If this project helps your work, cite it using [`CITATION.cff`](CITATION.cff). Author ORCID: [`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831). The repository's **Cite this repository** menu can generate APA and BibTeX.
+Author: [`fallen-leaves`](https://github.com/Fallen-leaves089); ORCID: [`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831). If this project helps your work, cite it using [`CITATION.cff`](CITATION.cff). The repository's **Cite this repository** menu can generate APA and BibTeX.
 
 ## License
 
@@ -170,6 +173,8 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 
 ## Status
 
+Full changelog: [CHANGELOG.md](CHANGELOG.md).
+
 `0.3.0`: add 44 common-user pitfalls and a "check these 12 first" quick list, covering wrong project directories, treating a review as a repair request, secret exposure, missing runtimes, databases, backups, domains/HTTPS, firewalls, permissions, rollback, handover, and AI-change acceptance. Keep the read-only baseline, untrusted-target protection, language-aware reports, contract tests, and package validation. Automated model regression is still not included.
 
 ---
@@ -177,6 +182,8 @@ The contract tests check the safety rules, templates, fixtures, and package stru
 # 项目体检·轻量版
 
 [English](#project-health-lite) | 中文
+
+仓库入口：[源码](https://github.com/Fallen-leaves089/project-health-lite) · [发布下载](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) · [更新记录](CHANGELOG.md) · [问题反馈](https://github.com/Fallen-leaves089/project-health-lite/issues) · [参与贡献](CONTRIBUTING.md) · [安全策略](SECURITY.md)
 
 给普通人的低门槛项目体检。它用一份说人话的报告回答：
 
@@ -335,12 +342,14 @@ python -B -m unittest discover -s tests -p "test_*.py"
 
 ## 引用
 
-如果这个项目对你的工作有帮助，请按 [`CITATION.cff`](CITATION.cff) 引用。作者 ORCID：[`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831)。GitHub 仓库页的 **Cite this repository** 可直接生成 APA 和 BibTeX。
+作者：[`fallen-leaves`](https://github.com/Fallen-leaves089)；ORCID：[`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831)。如果这个项目对你的工作有帮助，请按 [`CITATION.cff`](CITATION.cff) 引用。GitHub 仓库页的 **Cite this repository** 可直接生成 APA 和 BibTeX。
 
 ## 许可证
 
 Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许可证与 NOTICE 即可。
 
 ## 当前状态
+
+完整更新记录：[CHANGELOG.md](CHANGELOG.md)。
 
 `0.3.0`：新增 44 条普通人高频坑和“如果只看 12 条”速查，覆盖找错目录、把检查当修复、密钥外泄、环境缺失、数据库、备份、域名/HTTPS、防火墙、权限、回滚、交接和 AI 改动验收。继续保留只读基线、不可信目标保护、语言跟随、契约测试和包校验；自动化模型回归仍未接入。
