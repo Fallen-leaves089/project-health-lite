@@ -3,7 +3,7 @@ name: project-health-lite
 description: 普通用户和第一次体检的默认低门槛项目体检；当用户问“这个项目能不能上线”“交接前要检查什么”“Agent 改完代码是否可靠”“有没有需要优化或维护的地方”时使用，也适用于 project readiness, handover check, AI agent change review, and maintenance review 等英文请求。只做默认只读的第一次检查；需要 P0-P3、证据链、真实回归或交付验收时交给 project-health。
 license: Apache-2.0
 metadata:
-  version: 0.3.0
+  version: 0.3.1
 ---
 
 # 项目体检·轻量版
@@ -123,6 +123,7 @@ metadata:
 - 每条问题都有文件位置或只读命令证据。
 - 实际跑过的命令要写清命令和结果/退出码；没跑的要说明原因。
 - 明确列出未覆盖范围，不把“本轮没发现”写成“绝对安全”。
+- 包校验和契约测试全绿只证明包与确定性契约自洽；未调用真实模型时，不得写成“模型行为已验证”。
 - 检查过程中没有修改文件，也没有泄露秘密值。
 
 用户明确要求修复时，另起修复任务；先说明会改哪些文件、影响什么、怎么验证，再动手。

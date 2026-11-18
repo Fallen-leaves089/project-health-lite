@@ -193,6 +193,22 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("Expand-Archive", readme)
         self.assertIn("Copy-Item", readme)
 
+    def test_validation_boundary_is_explicit(self) -> None:
+        readme = read("README.md")
+        for marker in (
+            "do not call a real model",
+            "does not mean model behavior is validated",
+            "not part of default CI",
+            "not a release gate",
+            "不调用真实模型",
+            "不等于模型行为已验证",
+            "不作为发布闸门",
+        ):
+            self.assertIn(marker, readme)
+        skill = read("SKILL.md")
+        self.assertIn("包校验和契约测试全绿只证明包与确定性契约自洽", skill)
+        self.assertIn("不得写成“模型行为已验证”", skill)
+
     def test_ci_uses_current_actions(self) -> None:
         workflow = read(".github/workflows/validate.yml")
         self.assertIn("actions/checkout@v7", workflow)
