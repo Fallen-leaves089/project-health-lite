@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata in this file."
 title: "project-health-lite"
 abstract: "A lightweight, read-only first-pass project health skill for people who are not full-time developers or security specialists. It gives plain-language guidance for launch readiness, handover, agent-change review, and maintenance."
-version: "0.3.1"
-date-released: "2026-11-18"
+version: "0.4.0"
+date-released: "2026-11-24"
 license: "Apache-2.0"
 type: software
 authors:
