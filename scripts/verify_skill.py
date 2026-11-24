@@ -26,6 +26,7 @@ REQUIRED_FILES = (
     "CHANGELOG.md",
     "docs/PRODUCT.md",
     "references/report-format.md",
+    "references/structural-experience.md",
     "agents/openai.yaml",
     "scripts/verify_skill.py",
     "tests/acceptance-cases.md",
@@ -275,6 +276,7 @@ def write_fixture(root: Path) -> None:
         "CHANGELOG.md": "## 1.2.3 - 2026-01-01\n\n- Test\n",
         "docs/PRODUCT.md": "# Test\n\n`1.2.3`: test\n",
         "references/report-format.md": "# Test\n",
+        "references/structural-experience.md": "# Test\n",
         "agents/openai.yaml": (
             'interface:\n'
             '  display_name: "Test"\n'

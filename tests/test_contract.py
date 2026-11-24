@@ -174,6 +174,37 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("域名/HTTPS", skill)
         self.assertIn("防火墙/安全组", skill)
 
+    def test_resident_tripwires_and_structural_hints_are_wired(self) -> None:
+        baseline = read("PITFALLS.md")
+        self.assertIn("## 常驻绊线（先看）", baseline)
+        self.assertIn("## 按需索引", baseline)
+        for number in range(1, 7):
+            self.assertIn(f"| L-RES-{number:02d} |", baseline)
+        self.assertLess(
+            baseline.index("## 常驻绊线（先看）"),
+            baseline.index("## 按需索引"),
+        )
+
+        skill = read("SKILL.md")
+        agents = read("AGENTS.md")
+        self.assertIn("6 条常驻绊线", skill)
+        self.assertIn("结构经验提示", skill)
+        self.assertIn("STRUCTURE.local.md", skill)
+        self.assertIn("6 条常驻绊线", agents)
+        self.assertIn("结构经验只在真实项目中核实后写入", agents)
+
+        manual = read("references/structural-experience.md")
+        for chapter in ("A", "B", "C", "D", "E", "F"):
+            self.assertIn(f"### {chapter} ", manual)
+        self.assertIn("只使用软提示", manual)
+        self.assertIn("没有经验不写占位条目", manual)
+
+        template = read("references/report-format.md")
+        self.assertIn("常驻绊线", template)
+        self.assertIn("结构经验", template)
+        self.assertIn("STRUCTURE.local.md", read(".gitignore"))
+        self.assertIn("references/structural-experience.md", read("scripts/verify_skill.py"))
+
     def test_validator_accepts_repository(self) -> None:
         result = subprocess.run(
             [sys.executable, "-B", str(ROOT / "scripts/verify_skill.py")],
