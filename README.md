@@ -96,7 +96,7 @@ For Claude Code, replace `~/.codex/skills/` with `~/.claude/skills/` (Windows: `
 
 ## Memory and upgrades
 
-`PITFALLS.md` is a read-only baseline shipped with the skill. The agent writes new lessons to `PITFALLS.local.md`, which is gitignored and preserved by the install/upgrade commands above. It chooses the first writable location:
+`PITFALLS.md` is a read-only baseline shipped with the skill. It starts with 6 resident user tripwires and an on-demand A-G index. The agent writes new lessons to `PITFALLS.local.md`, which is gitignored and preserved by the install/upgrade commands above. Structural hints are optional and stay lightweight in `references/structural-experience.md`; verified local hints may be written to `STRUCTURE.local.md`, which is also gitignored. It chooses the first writable location:
 
 1. `$PROJECT_HEALTH_LITE_HOME/PITFALLS.local.md` when the variable is set;
 2. `PITFALLS.local.md` in the skill directory;
@@ -272,6 +272,8 @@ Claude Code 把目标目录换成 `~/.claude/skills/`（Windows 为 `$HOME\.clau
 ## 记忆与升级
 
 `PITFALLS.md` 是随技能发布的只读基线。Agent 把新教训写入 `PITFALLS.local.md`；该文件已被 Git 忽略，并会被上面的安装/升级命令保留。记忆位置按以下顺序选择：
+
+`references/structural-experience.md` 是空白起步的结构经验提示册，轻量版只做软提示；真实项目中核实后才写入 `STRUCTURE.local.md`，没有经验不写占位条目。
 
 1. 已设置 `PROJECT_HEALTH_LITE_HOME` 时，使用它指向目录下的 `PITFALLS.local.md`；
 2. 技能目录下的 `PITFALLS.local.md`；
