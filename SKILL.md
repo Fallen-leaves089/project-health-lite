@@ -55,9 +55,9 @@ metadata:
 
 ## 结构经验提示
 
-完成项目证据检查后，可按 [references/structural-experience.md](references/structural-experience.md) 的 A-F 索引选 1-2 章，寻找可复用的结构提示。轻量版只给软提示，不进入详细规则；区域为空就继续检查。只有在真实项目中核实、可复用且边界清楚的经验，才写入用户本地的 `STRUCTURE.local.md`，没有经验不写占位条目。
+完成项目证据检查后，必须按 [references/structural-experience.md](references/structural-experience.md) 的 A-F 索引做一次收尾回收，并选 1-2 章寻找可复用的结构提示。轻量版只给软提示，不进入详细规则；区域为空就继续检查。发现真实项目中已核实、可复用且边界清楚的经验时，Agent 必须直接写入用户本地的 `STRUCTURE.local.md`，不等用户提醒；没有合格经验时明确报告“结构经验：无新增”。首次创建本地手册前说明路径；写入失败时报告待记录内容和原因，不中断主任务。
 
-记忆位置按以下顺序选择，并且只选第一个可写的位置：
+记忆位置按以下顺序选择，并且只选第一个可写的位置；`PITFALLS.local.md` 和 `STRUCTURE.local.md` 使用同一顺序：
 
 1. 环境变量 `PROJECT_HEALTH_LITE_HOME` 指向目录下的 `PITFALLS.local.md`（显式覆盖）；
 2. 技能目录下的 `PITFALLS.local.md`；
