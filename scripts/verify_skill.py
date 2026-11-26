@@ -34,6 +34,16 @@ REQUIRED_FILES = (
 )
 TEXT_SUFFIXES = {".md", ".py", ".yaml", ".yml", ".txt", ".json", ".toml", ".example", ".fixture"}
 SPECIAL_TEXT_FILES = {".gitattributes", ".gitignore", "LICENSE", "NOTICE"}
+TEXT_DOTFILES = {
+    ".env",
+    ".git-credentials",
+    ".netrc",
+    ".npmrc",
+    ".nvmrc",
+    ".pypirc",
+    ".tool-versions",
+}
+TEXT_FILENAMES = {"Dockerfile", "Makefile", "Procfile"}
 SKIP_DIRS = {
     ".git",
     ".mypy_cache",
@@ -45,13 +55,34 @@ SKIP_DIRS = {
     "dist",
     "node_modules",
 }
-SKIP_FILES = {"PITFALLS.local.md"}
+SKIP_FILES = {".DS_Store", "PITFALLS.local.md", "STRUCTURE.local.md", "Thumbs.db"}
+ASSIGNED_SECRET_PATTERN = re.compile(
+    r'(?i)(?<![A-Za-z0-9_])'
+    r'(?:api[_-]?key|client[_-]?secret|access[_-]?token|refresh[_-]?token|'
+    r'private[_-]?key|secret|token|password|passwd|pwd|passphrase)'
+    r'["\']?\s*[:=]\s*["\']?'
+    r'(?!<|\$|\{|%|\[|REDACTED|CHANGE_ME|example|placeholder|'
+    r'null|true|false|none|\*+)'
+    r'[A-Za-z0-9_\-./+=$]{12,}'
+)
 FORBIDDEN_PATTERNS = (
     re.compile(r"(?i)(?<![\w])[A-Z]:[\\/]"),
     re.compile(r"(?<![\w.])/(?:home|Users)/[A-Za-z0-9._-]+"),
     re.compile(r"BEGIN [A-Z ]*PRIVATE KEY"),
     re.compile(r"ghp_[A-Za-z0-9]{20,}"),
     re.compile(r"github_pat_[A-Za-z0-9_]+"),
+    re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b"),
+    re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
+    ASSIGNED_SECRET_PATTERN,
+    re.compile(
+        r"(?i)\bAuthorization\s*[:=]\s*Bearer\s+[A-Za-z0-9._~+/=-]{8,}"
+    ),
+    re.compile(
+        r"(?i)\bCookie\s*:\s*[^;\r\n]{1,80}=[A-Za-z0-9._~+/=-]{8,}"
+    ),
+    re.compile(
+        r"\beyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\b"
+    ),
 )
 LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 TODO_PLACEHOLDER_PATTERN = re.compile(r"(?m)^[ ]{0,3}\[TODO:[^\n]*\][ \t]*$")
@@ -202,7 +233,13 @@ def iter_text_files(root: Path) -> Iterator[Path]:
             if name in SKIP_FILES:
                 continue
             path = Path(dirpath) / name
-            if path.suffix.lower() in TEXT_SUFFIXES or name in SPECIAL_TEXT_FILES:
+            if (
+                path.suffix.lower() in TEXT_SUFFIXES
+                or name in SPECIAL_TEXT_FILES
+                or name in TEXT_DOTFILES
+                or name in TEXT_FILENAMES
+                or name.startswith(".env.")
+            ):
                 yield path
 
 
@@ -269,6 +306,7 @@ def write_fixture(root: Path) -> None:
         "PITFALLS.md": "# Test\n",
         "PITFALLS.local.example.md": "# Test\n",
         "README.md": "# Test\n\n`1.2.3`: test\n",
+        ".env": "TOKEN=<REDACTED>\n",
         "LICENSE": "Apache License\nVersion 2.0\n",
         "NOTICE": "Test\n",
         "CONTRIBUTING.md": "# Test\n",
@@ -373,6 +411,26 @@ def self_test() -> int:
         if not check_tree(root):
             print("self-test failed: GitHub token was accepted")
             return 1
+
+        secret_samples = {
+            ".env": "API_KEY=" + "abcdefghijklmnopqrstuvwxyz",
+            "auth-header.txt": "Authorization: Bearer " + "abcdefghijklmnopqrstuvwxyz",
+            "cookie-header.txt": "Cookie: sessionid=" + "abcdefghijklmnopqrstuvwxyz",
+            "jwt-token.txt": (
+                "eyJhbGciOiJIUzI1NiJ9."
+                + "abcdefghijklmnopqrstuvwxyz"
+                + "."
+                + "abcdefghijklmnopqrstuvwxyz"
+            ),
+        }
+        for name, content in secret_samples.items():
+            write_fixture(root)
+            target = root / name
+            write_lf(target, content + "\n")
+            if not check_tree(root):
+                print(f"self-test failed: secret sample was accepted: {name}")
+                return 1
+            target.unlink()
 
         write_fixture(root)
         write_lf(root / "CHANGELOG.md", "## 9.9.9 - 2026-01-01\n\n- Test\n")

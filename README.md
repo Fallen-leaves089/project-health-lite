@@ -27,12 +27,12 @@ This is an independent lite edition, not a replacement for the professional [`pr
 
 ## Install
 
-**Recommended: download the zip from the [latest GitHub Release Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest).** Set `$version` below to the release shown there (currently `0.4.0`), verify the adjacent `.sha256` file, and extract the archive:
+**Recommended: download the zip from the [latest GitHub Release Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest).** Set `$version` below to the release shown there (currently `0.4.1`), verify the adjacent `.sha256` file, and extract the archive:
 
 Windows PowerShell:
 
 ```powershell
-$version = '0.4.0'
+$version = '0.4.1'
 $zip = ".\project-health-lite-v$version.zip"
 $expected = ((Get-Content -LiteralPath ($zip + '.sha256') -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
 $actual = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -43,7 +43,7 @@ Expand-Archive -LiteralPath $zip -DestinationPath . -Force
 macOS / Linux:
 
 ```bash
-version='0.4.0'
+version='0.4.1'
 zip="project-health-lite-v${version}.zip"
 expected=$(cut -d' ' -f1 "${zip}.sha256")
 if command -v sha256sum >/dev/null 2>&1; then
@@ -176,7 +176,9 @@ These commands are deterministic checks of the package, safety rules, templates,
 
 Full changelog: [CHANGELOG.md](CHANGELOG.md).
 
-`0.4.0`: add resident user tripwires, an on-demand A-G pitfall index, and lightweight structural-experience hints while keeping the lite edition free of the professional schema and recorder.
+`0.4.1`: harden the lightweight validator against hidden configuration files and common token/header formats, without adding the professional recorder.
+
+旧版 0.4.0: add resident user tripwires, an on-demand A-G pitfall index, and lightweight structural-experience hints while keeping the lite edition free of the professional schema and recorder.
 
 旧版 0.3.1: clarify that deterministic package and contract checks are not model behavior validation; add evidence fields for manual model acceptance and keep automated model regression out of default CI.
 
@@ -203,12 +205,12 @@ Full changelog: [CHANGELOG.md](CHANGELOG.md).
 
 ## 安装
 
-**推荐从 [最新 Releases Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) 下载。** 把下面 `$version` 改成页面显示的版本（当前为 `0.4.0`），下载 zip 和旁边的 `.sha256` 文件，核对哈希后解压：
+**推荐从 [最新 Releases Assets](https://github.com/Fallen-leaves089/project-health-lite/releases/latest) 下载。** 把下面 `$version` 改成页面显示的版本（当前为 `0.4.1`），下载 zip 和旁边的 `.sha256` 文件，核对哈希后解压：
 
 Windows PowerShell：
 
 ```powershell
-$version = '0.4.0'
+$version = '0.4.1'
 $zip = ".\project-health-lite-v$version.zip"
 $expected = ((Get-Content -LiteralPath ($zip + '.sha256') -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
 $actual = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -219,7 +221,7 @@ Expand-Archive -LiteralPath $zip -DestinationPath . -Force
 macOS / Linux：
 
 ```bash
-version='0.4.0'
+version='0.4.1'
 zip="project-health-lite-v${version}.zip"
 expected=$(cut -d' ' -f1 "${zip}.sha256")
 if command -v sha256sum >/dev/null 2>&1; then
@@ -358,6 +360,8 @@ Apache-2.0。个人和企业都可以免费使用、修改和分发，保留许�
 
 完整更新记录：[CHANGELOG.md](CHANGELOG.md)。
 
-`0.4.0`：增加常驻用户高频绊线、A-G 按需避坑索引和轻量结构经验提示；保持轻量版不依赖专业版 schema 和受控器。
+`0.4.1`：加强轻量验证器对隐藏配置文件和常见令牌/请求头格式的检查，不引入专业版受控器。
+
+旧版 0.4.0：增加常驻用户高频绊线、A-G 按需避坑索引和轻量结构经验提示；保持轻量版不依赖专业版 schema 和受控器。
 
 旧版 0.3.1：明确包校验和契约测试不等于模型行为验证；补充人工模型验收的证据字段，自动化模型回归仍不进入默认 CI。
